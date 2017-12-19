@@ -1,0 +1,58 @@
+
+SHELL=/bin/sh #Shell da utilizzare per l'esecuzione dei comandi
+
+### Path to sources ###
+RANDOM_WALK  = $(PWD)
+SRC_RANDOM_WALK  = $(RANDOM_WALK)/src
+UPDIR  = ../
+
+
+### Compiler ###
+COMP  = gnu
+
+### Inclusione del file contenente le regole di compilazione
+include COMP.$(COMP)
+
+
+
+OBJECTS  = R2D2.o GENERIC.o #File oggetto
+
+SRCS  = R2D2.c GENERIC.c #File sorgente
+
+### Rules ###
+all: src Random-walk
+
+.SUFFIXES: .c .o
+
+
+src:
+ cd $(SRC_RANDOM_WALK); $(CC) $(CFLAGS) -o R2D2.o -c R2D2.c; $(CC) $(CFLAGS) -o GENERIC.o -c GENERIC.c
+
+Random-walk:
+ cd $(SRC_RANDOM_WALK); $(CC) -I$(UPDIR) $(CFLAGS) RANDOM_WALK.c $(OBJECTS) -o RANDOM_WALK_$(COMP)
+
+
+ @echo; if [ ! -d $(RANDOM_WALK)/bin_$(COMP) ]; then mkdir $(RANDOM_WALK)/bin_$(COMP); fi
+ @echo; mv $(SRC_RANDOM_WALK)/RANDOM_WALK_$(COMP) $(RANDOM_WALK)/bin_$(COMP)/.
+
+
+
+.PHONY: all clean debclean veryclean verydebclean
+
+clean:
+	cd $(SRC_RANDOM_WALK); rm -f *.o
+	cd $(RANDOM_WALK)/bin_$(COMP); rm -f RANDOM_WALK_$(COMP)
+
+debclean:
+	cd $(SRC_RANDOM_WALK); rm -f *.o
+	cd $(RANDOM_WALK)/bin_$(COMP); rm -f RANDOM_WALK_$(COMP)
+
+veryclean:
+	cd $(SRC_RANDOM_WALK); rm -f *.o
+	#cd $(SRC_); rm -f *.o
+	cd $(RANDOM_WALK)/bin_$(COMP); rm -f RANDOM_WALK_$(COMP)
+
+verydebclean:
+	cd $(SRC_RANDOM_WALK); rm -f *.o
+	#cd $(SRC_); rm -f *.o
+	cd $(RANDOM_WALK)/bin_$(COMP); rm -f RANDOM_WALK_$(COMP)
